@@ -26,8 +26,8 @@ var svg = d3.select("#scatter") // d3.select() the id "#scatter" element
 // Note: Making this a function allows us to easily call
 // it in the mobility section of our code.
 var circleRadius;
-function getCircleRadius(data) {
-  if (width >= 530) {  // check if the width is less than or equal to 530
+function getCircleRadius() {
+  if (width <= 530) {  // check if the width is less than or equal to 530
     circleRadius = 5; // set the circleRadius to 5
   }
   else { // else
@@ -105,7 +105,7 @@ yText.append("text") // append a "text" element to the yText group
       .attr("y", -26) // set the "y" attribute to -26
       .attr("data-name", "obesity") // set the 'data-name' attribute to 'obesity'
       .attr("data-axis", "y") // set the data-axis attribute to 'y'
-      .attr("axisText active y", true) // give it class of axisText, active, and y
+      .classed("axisText active y", true) // give it class of axisText, active, and y
       .text("Obesity"); // set the text to be a human readable label
 
 // 2. Smokes
@@ -118,7 +118,7 @@ yText.append("text") // append a "text" element to the yText group
 
 // 3. Lacks Healthcare
 yText.append("text") // append a "text" element to the yText group
-      .attr("y", 0) // set the "y" attribute to 0
+      .attr("y", 26) // set the "y" attribute to 26
       .attr("data-name", "healthcare") // set the 'data-name' attribute to 'healthcare'
       .attr("data-axis", "y") // set the data-axis attribute to 'y'
       .classed("axisText inactive y", true) // give it class of axisText, inactive, and y
@@ -132,13 +132,13 @@ yText.append("text") // append a "text" element to the yText group
 // by the Behavioral Risk Factor Surveillance System.
 
 // Import our CSV data with d3's .csv import method.
-// d3.csv("../data/data.csv").then(function(data) {
+// d3.csv("assets/data/data.csv").then(function(data) {
 //   // Visualize the data
-//   data.forEach(function(data) {
-//     data.poverty = parseInt(data.poverty);
-//     data.age = parseInt(data.age);
-//     data.income = parseInt(data.income);
-//   }); // call your visualize() function on the data
+//   // data.forEach(function(data) {
+//   //   data.poverty = parseInt(data.poverty);
+//   //   data.age = parseInt(data.age);
+//   //   data.income = parseInt(data.income);
+//   // }); // call your visualize() function on the data
 
 //   visualize(data);
 // });
@@ -163,32 +163,32 @@ function visualize(data) {
   var yMin;
   var yMax;
 
-  // This function allows us to set up tooltip rules (see d3-tip.js).
-  var toolTip = d3.tip() // create a d3.tip()
-                  .attr("class", "d3-tip") // set the class to 'd3-tip'
-                  .offset([40, -60]) // set the offset to [40, -60]
-                  .html(function(d) { 
-                    // x key
-                    var theX;
-                    // Grab the state name.
-                    var theState = `<div>${d.state}</div>`;
-                    // Snatch the y value's key and value.
-                    var theY = `<div>${currentY}: ${d[currentY]}%</div>`;
-                    // If the x key is poverty
-                    if (currentX === "poverty") {
-                      // Grab the x key and a version of the value formatted to show percentage
-                      theX = `<div>${currentX}: ${d[currentX]}%</div>`;
-                    }
-                    else {
-                      // Otherwise
-                      // Grab the x key and a version of the value formatted to include commas after every third digit.
-                      theX = `<div>${currentX}: ${parseFloat(d[currentX]).toLocaleString("en")}</div>`;
-                    }
-                    // Display what we capture.
-                    return theState + theX + theY;
-                  });
-  // Call the toolTip function.
-  svg.call(toolTip);
+  // // This function allows us to set up tooltip rules (see d3-tip.js).
+  // var toolTip = d3.tip() // create a d3.tip()
+  //                 .attr("class", "d3-tip") // set the class to 'd3-tip'
+  //                 .offset([40, -60]) // set the offset to [40, -60]
+  //                 .html(function(d) { return "Radius: " + d; });
+  //                 //   // x key
+  //                 //   var theX;
+  //                 //   // Grab the state name.
+  //                 //   var theState = `<div>${d.state}</div>`;
+  //                 //   // Snatch the y value's key and value.
+  //                 //   var theY = `<div>${currentY}: ${d[currentY]}%</div>`;
+  //                 //   // If the x key is poverty
+  //                 //   if (currentX === "poverty") {
+  //                 //     // Grab the x key and a version of the value formatted to show percentage
+  //                 //     theX = `<div>${currentX}: ${d[currentX]}%</div>`;
+  //                 //   }
+  //                 //   else {
+  //                 //     // Otherwise
+  //                 //     // Grab the x key and a version of the value formatted to include commas after every third digit.
+  //                 //     theX = `<div>${currentX}: ${parseFloat(d[currentX]).toLocaleString("en")}</div>`;
+  //                 //   }
+  //                 //   // Display what we capture.
+  //                 //   return theState + theX + theY;
+  //                 // });
+  //     // Call the toolTip function.
+  // svg.call(toolTip);
 
   // PART 2: D.R.Y!
   // ==============
@@ -270,12 +270,12 @@ function visualize(data) {
   // The transform attribute specifies where to place the axes.
   svg.append("g") // append a 'g' element to the svg
       .call(xAxis) // .call() the xAxis
-      .classed("xAxis", true) // set the class .attr() to be 'xAxis'
+      .attr("class", "xAxis") // set the class .attr() to be 'xAxis'
       .attr("transform", `translate(0,${(height - margin - labelArea)})`);
 
   svg.append("g") // append a 'g' element to the svg
       .call(yAxis) // .call() the yAxis
-      .classed("yAxis", true) // set the class .attr() to be 'yAxis'
+      .attr("class", "yAxis") // set the class .attr() to be 'yAxis'
       .attr("transform", `translate(${(margin + labelArea)}, 0)`);
 
   // Now let's make a grouping for our dots and their labels.
@@ -288,16 +288,16 @@ function visualize(data) {
             .attr("cx", d => xScale(d[currentX])) // set the 'cx' .attr() to map from d => xScale() applied to d[currentX]
             .attr("cy", d => yScale(d[currentY])) // set the 'cx' .attr() to map from d => yScale() applied to d[currentY]
             .attr("r", circleRadius) // set the 'r' attr() to be the circleRadius
-            .attr("class", d => d.abbr) // set the class attr() to map from d => the d.abbr
+            .attr("class", d => `${d.abbr} stateCircle`) // set the class attr() to map from d => the d.abbr
             .on("mouseover", function(d) { // .on 'mouseover' event, fire off a function that takes argument d
               // Show the tooltip
-              toolTip.show(d); // use toolTip.show() with d and this as the arguments
+              toolTip.show(d, this); // use toolTip.show() with d and this as the arguments
               // Highlight the state circle's border
-              d3.select(this).transition().style("stroke", "red"); // use d3.select() the this element, and modify the 'stroke' .style() to a color of your choosing
+              d3.select(this).transition().style("stroke", "orange"); // use d3.select() the this element, and modify the 'stroke' .style() to a color of your choosing
             })
             .on("mouseout", function(d) { // on 'mouseout' fire off a function that takes argument d
                 // Remove the tooltip
-                toolTip.hide(d); // use toolTip.hide() with d and this as the arguments
+                toolTip.hide(d, this); // use toolTip.hide() with d and this as the arguments
                 // Remove highlight
                 d3.select(this).transition().style("stroke", "blue"); // use d3.select() the this element, and modify the 'stroke' .style() to another color of your choosing
             });
@@ -315,16 +315,16 @@ function visualize(data) {
               // pushes it into the middle of the circle.
               .attr("dy", d => yScale(d[currentY]) + circleRadius / 2.5) // set the 'dy' attr() to map from d => yScale() applied to d[currentY]) + circleRadius / 2.5
               .attr("font-size", circleRadius) // set the 'font-size' .attr() to circleRadius
-              .attr("class", d => d.abbr) // set the 'class' attr() to be from d => d.abbr
+              .attr("class", d => `${d.abbr} stateText`) // set the 'class' attr() to be from d => d.abbr
               .on("mouseover", function(d) { // on 'mouseover' event, fire off a function that takes argument d
                 // Show the tooltip
-                toolTip.show(d); // use toolTip.show() with d and this as the arguments
+                toolTip.show(d, this); // use toolTip.show() with d and this as the arguments
                 // Highlight the state text's border
                 d3.select(this).transition().style("stroke", "red"); // use d3.select() the this element, and modify the 'stroke' .style() to a color of your choosing
               })
               .on("mouseout", function(d) { // on 'mouseout' fire off a function that takes argument d
                   // Remove the tooltip
-                  toolTip.hide(d); // use toolTip.hide() with d and this as the arguments
+                  toolTip.hide(d, this); // use toolTip.hide() with d and this as the arguments
                   // Remove highlight
                   d3.select(this).transition().style("stroke", "blue"); // use d3.select() the this element, and modify the 'stroke' .style() to another color of your choosing
               });
@@ -343,13 +343,13 @@ function visualize(data) {
     // We only want to run this on inactive labels.
     // It's a waste of the processor to execute the function
     // if the data is already displayed on the graph.
-    if (selectedLabel, "inactive") { // if the selectedLabel has the class 'inactive'
+    if (selectedLabel.classed("inactive", true)) { // if the selectedLabel has the class 'inactive'
       // Grab the name and axis saved in label.
       var axis = selectedLabel.attr("data-axis"); // grab the 'data-axis' .attr() from the selectedLabel
       var name = selectedLabel.attr("data-name"); // grab the 'data-name' attr()
 
       // When x is the saved axis, execute this:
-      if (axis == "x") { // if the axis is equal to 'x'
+      if (axis === "x") { // if the axis is equal to 'x'
         // Make currentX the same as the data name.
         currentX = name;
 
@@ -360,7 +360,7 @@ function visualize(data) {
         xScale.domain([xMin, xMax]); // set the .domain() of xScale to be the [xMin, and xMax]
 
         // Now use a transition when we update the xAxis.
-        svg.select("xAxis")// select the .xAxis elements on the svg
+        d3.select(".xAxis")// select the .xAxis elements on the svg
             .transition() // set a transition()
             .duration(300) // give it a duration() of 300ms
             .call(xAxis); // call the xAxis
@@ -400,7 +400,7 @@ function visualize(data) {
         yScale.domain([yMin, yMax]); // set the .domain() of xScale to be the [xMin, and xMax]
 
         // Now use a transition when we update the xAxis.
-        svg.select("yAxis")// select the .xAxis elements on the svg
+        d3.select(".yAxis")// select the .xAxis elements on the svg
             .transition() // set a transition()
             .duration(300) // give it a duration() of 300ms
             .call(yAxis); // call the xAxis
@@ -412,7 +412,7 @@ function visualize(data) {
           // from it's original spot to the new location.
           d3.select(this) // use d3.select(this)
             .transition() // set a transition
-            .attr("yx", d => yScale(d[currentY])) // set the 'cx' attribute to go from d => xScale applied to d[currentX]
+            .attr("cy", d => yScale(d[currentY])) // set the 'cx' attribute to go from d => xScale applied to d[currentX]
             .duration(300); // set the duration to 300ms
         });
 
@@ -435,7 +435,7 @@ function visualize(data) {
   // =========================
   // With d3, we can call a resize function whenever the window dimensions change.
   // This makes it possible to add true mobile-responsiveness to our charts.
-  d3.select() // d3.select() the window, and on resize event call the function resizeChart
+  d3.select(window).on("resize", resizeChart) // d3.select() the window, and on resize event call the function resizeChart
     
   // One caveat: we need to specify what specific parts of the chart need size and position changes.
   function resizeChart() { // define a function called resizeChart that takes no arguments
@@ -459,6 +459,7 @@ function visualize(data) {
 
     svg.select(".yAxis") // select the .yAxis elements in the svg
         .call(yAxis) // call the yAxis function
+        .attr("transform", "translate(" + (margin + labelArea) + ", 0)");
 
     // Update the ticks on each axis.
     tickCount(); // call the tickCount() function
@@ -472,7 +473,7 @@ function visualize(data) {
     getCircleRadius(); // call getCircleRadius()
 
     // With the axis changed, let's update the location and radius of the state circles.
-    d3.selectAll("circle") // d3.selectAll() 'circle' elements
+    d3.selectAll(".statecircle") // d3.selectAll() 'circle' elements
       .attr("cy", d => yScale(d[currentY])) // set the 'cy' attribute to use the yScale() d[currentY]
       .attr("cx", d => xScale(d[currentX])) // set the 'cy' attribute to use the xScale() d[currentX]
       .attr("r", circleRadius); // set the 'r' attribute to be the circleRadius
@@ -485,13 +486,13 @@ function visualize(data) {
      .attr("r", circleRadius); // set the 'r' attribute to be the circleRadius  }
 }};
 
-d3.csv("../data/data.csv").then(function(data) {
+d3.csv("assets/data/data.csv").then(function(data) {
   // Visualize the data
-  data.forEach(function(data) {
-    data.poverty = parseInt(data.poverty);
-    data.age = parseInt(data.age);
-    data.income = parseInt(data.income);
-  }); // call your visualize() function on the data
+  // data.forEach(function(data) {
+  //   data.poverty = parseInt(data.poverty);
+  //   data.age = parseInt(data.age);
+  //   data.income = parseInt(data.income);
+  // }); // call your visualize() function on the data
 
   visualize(data);
 });
